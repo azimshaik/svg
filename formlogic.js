@@ -71,12 +71,12 @@ $(document).ready(function(e) {
     var width = spiderContainer.width();
     var height = spiderContainer.height();
     //drawCircle(e.clientX,e.clientY);
-    drawCircle(width, height);
+    //drawCircle(width, height);
   });
 
-  function drawCircle(width, height) {
-    var cx = width / 2;
-    var cy = height / 2;
+  function drawCircle(originX, originY) {
+    var cx = originX;
+    var cy = originY;
     console.log(cx);
     var circle =
       '<circle cx="' +
@@ -95,18 +95,30 @@ $(document).ready(function(e) {
     var spiderContainer = $("#spiderContainer");
     var width = spiderContainer.width();
     var height = spiderContainer.height();
-    var thetaIncrement = (2 * Math.PI) / dim.length;
+    var originX = width / 2;
+    var originY = height / 2;
+    drawCircle(originX, originY);
+    var thetaIncrement = (2 * Math.PI * (180 / Math.PI)) / dim.length;
+    console.log(thetaIncrement);
     var theta = 0;
     for (var i = 0; i < dim.length; i++) {
-      var radius = 20;
-      var x1 = radius * Math.cos(theta);
-      var y1 = radius * Math.sin(theta);
-      var limblength = 6;
-      var x2 = limblength * Math.cos(theta);
-      var y2 = limblength * Math.sin(theta);
-      drawLine(x1, y1, x2, y2);
+      var radius = 60;
+      var cosTheta = Math.cos(theta * (Math.PI / 180));
+      var sinTheta = Math.sin(theta * (Math.PI / 180));
+      var x1 = originX + radius * cosTheta;
+      var y1 = originY + radius * sinTheta;
+      var limblength = 200;
+      var x2 = limblength * Math.cos(theta * (Math.PI / 180));
+      var y2 = limblength * Math.sin(theta * (Math.PI / 180));
+      drawLine(x1, y1, x1 + x2, y1 + y2);
+      console.log(x1);
+      theta += thetaIncrement;
     }
   }
+
+  Math.degrees = function(radians) {
+    return (radians * 180) / Math.PI;
+  };
 
   function drawLine(x1, y1, x2, y2) {
     var line =
