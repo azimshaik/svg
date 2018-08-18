@@ -101,17 +101,21 @@ $(document).ready(function(e) {
       var x1 = originX + radius * cosTheta;
       var y1 = originY + radius * sinTheta;
       var limblength = 200;
-      var x2 = limblength * Math.cos(theta * (Math.PI / 180));
-      var y2 = limblength * Math.sin(theta * (Math.PI / 180));
-      drawLine(x1, y1, x1 + x2, y1 + y2);
+      var x2 = x1 + limblength * Math.cos(theta * (Math.PI / 180));
+      var y2 = y1 + limblength * Math.sin(theta * (Math.PI / 180));
+      drawLine(x1, y1, x2, y2);
+      //getPointsBetween(x1, y1);
       console.log(x1);
+      //   for (var x = 0; x < 3; x++) {
+      //     var spotRadius = 10;
+      //     drawCircle();
+      //   }
+
       theta += thetaIncrement;
     }
   }
 
-  Math.degrees = function(radians) {
-    return (radians * 180) / Math.PI;
-  };
+  function getPointsBetween() {}
 
   function drawLine(x1, y1, x2, y2) {
     var line =
