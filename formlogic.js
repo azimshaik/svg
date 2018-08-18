@@ -43,6 +43,7 @@ $(document).ready(function(e) {
       .parent("div")
       .remove();
     x--;
+    $("#spiderContainer").html("");
     console.log("removed");
   });
 
