@@ -12,12 +12,12 @@ class Coordinate {
 
 $(document).ready(function(e) {
   var maxrows = 6;
-  var x = 1;
+  var rows = 1;
   var i = 1;
   var j = 1;
   var maxlevels = 2;
   $(".add_more").click(function(e) {
-    if (x <= maxrows) {
+    if (rows <= maxrows) {
       var dimension_name = "dimension" + i;
       var level_name1 = "level" + i + "_" + 1;
       var level_name2 = "level" + i + "_" + 2;
@@ -33,7 +33,7 @@ $(document).ready(function(e) {
         level_name3 +
         '"> <input id="del" type="button" value="X"><br></div>';
       $("#container").append(html);
-      x++;
+      rows++;
       //console.log("added");
       i++;
     }
@@ -42,7 +42,7 @@ $(document).ready(function(e) {
     $(this)
       .parent("div")
       .remove();
-    x--;
+    rows--;
     $("#svgContainer").text("");
     //location.reload();
     console.log("removed");
@@ -72,13 +72,15 @@ $(document).ready(function(e) {
   function drawCircle(originX, originY, r) {
     var cx = originX;
     var cy = originY;
-    console.log(cx);
+    //console.log(cx);
     var circle =
       '<circle cx="' +
       cx +
       '" cy="' +
       cy +
-      '" r="60" style="stroke:#000000; fill:white" />';
+      '" r="' +
+      r +
+      '" style="stroke:#000000; fill:white" />';
     var existing = $("#svgContainer").html();
     $("#svgContainer").html(existing + circle);
     //$("#svgContainer").html(existing+line);
@@ -92,7 +94,7 @@ $(document).ready(function(e) {
     var originY = height;
     drawCircle(originX, originY, 60);
     var thetaIncrement = (2 * Math.PI * (180 / Math.PI)) / dim.length;
-    console.log(thetaIncrement);
+    //console.log(thetaIncrement);
     var theta = 0;
     for (var i = 0; i < dim.length; i++) {
       var radius = 60;
@@ -105,15 +107,20 @@ $(document).ready(function(e) {
       var y2 = y1 + limblength * Math.sin(theta * (Math.PI / 180));
       drawLine(x1, y1, x2, y2);
       var pointsBetween = getPointsBetween(x1, y1, x2, y2, 3);
-      console.log(x1);
+      //console.log(x1);
       for (var j = 0; j < 3; j++) {
         var spotRadius = 10;
-        drawCircle(
-          pointsBetween[j].x - spotRadius,
-          pointsBetween[j].y + spotRadius,
-          pointsBetween[j].x + spotRadius,
-          pointsBetween[j].y - spotRadius
-        );
+        var x =
+          (pointsBetween[j].x -
+            spotRadius +
+            (pointsBetween[j].x + spotRadius)) /
+          2;
+        var y =
+          (pointsBetween[j].y +
+            spotRadius +
+            (pointsBetween[j].y - spotRadius)) /
+          2;
+        drawCircle(x, y, spotRadius);
       }
 
       theta += thetaIncrement;
@@ -121,9 +128,10 @@ $(document).ready(function(e) {
   }
   var spotCount;
   function getPointsBetween(x1, y1, x2, y2, spotCount) {
+    var pointsBetween = [];
+    x2 = Math.ceil(x2);
     if (x1 != x2) {
       //Calculating slope
-      var pointsBetween = [];
       var m = (y2 - y1) / (x2 - x1);
       var b = y1 - m * x1;
       var deltaX = (x2 - x1) / spotCount;
