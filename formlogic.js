@@ -69,7 +69,7 @@ $(document).ready(function(e) {
     drawSpider(dim, lev);
   });
 
-  function drawCircle(originX, originY) {
+  function drawCircle(originX, originY, r) {
     var cx = originX;
     var cy = originY;
     console.log(cx);
@@ -90,7 +90,7 @@ $(document).ready(function(e) {
     var height = spiderContainer.height();
     var originX = width;
     var originY = height;
-    drawCircle(originX, originY);
+    drawCircle(originX, originY, 60);
     var thetaIncrement = (2 * Math.PI * (180 / Math.PI)) / dim.length;
     console.log(thetaIncrement);
     var theta = 0;
@@ -104,18 +104,46 @@ $(document).ready(function(e) {
       var x2 = x1 + limblength * Math.cos(theta * (Math.PI / 180));
       var y2 = y1 + limblength * Math.sin(theta * (Math.PI / 180));
       drawLine(x1, y1, x2, y2);
-      //getPointsBetween(x1, y1);
+      var pointsBetween = getPointsBetween(x1, y1, x2, y2, 3);
       console.log(x1);
-      //   for (var x = 0; x < 3; x++) {
-      //     var spotRadius = 10;
-      //     drawCircle();
-      //   }
+      for (var j = 0; j < 3; j++) {
+        var spotRadius = 10;
+        drawCircle(
+          pointsBetween[j].x - spotRadius,
+          pointsBetween[j].y + spotRadius,
+          pointsBetween[j].x + spotRadius,
+          pointsBetween[j].y - spotRadius
+        );
+      }
 
       theta += thetaIncrement;
     }
   }
-
-  function getPointsBetween() {}
+  var spotCount;
+  function getPointsBetween(x1, y1, x2, y2, spotCount) {
+    if (x1 != x2) {
+      //Calculating slope
+      var pointsBetween = [];
+      var m = (y2 - y1) / (x2 - x1);
+      var b = y1 - m * x1;
+      var deltaX = (x2 - x1) / spotCount;
+      for (var k = 1; k <= spotCount; k++) {
+        var point = new Coordinate();
+        point.x = x1 + deltaX * k;
+        point.y = m * point.x + b;
+        pointsBetween.push(point);
+      }
+    } else {
+      var deltaY = (y2 - y1) / spotCount;
+      for (var k = 1; k <= spotCount; k++) {
+        var point = new Coordinate();
+        point.x = x1;
+        point.y = y1 + deltaY * k;
+        pointsBetween.push(point);
+      }
+    }
+    return pointsBetween;
+  }
 
   function drawLine(x1, y1, x2, y2) {
     var line =
