@@ -43,12 +43,14 @@ $(document).ready(function(e) {
       .parent("div")
       .remove();
     x--;
-    $("#spiderContainer").html("");
+    $("#svgContainer").text("");
+    //location.reload();
     console.log("removed");
   });
 
   $("form").submit(function(e) {
     event.preventDefault();
+    $("#svgContainer").text("");
     var dim = [];
     var lev = [];
     var obj = {};
@@ -67,14 +69,6 @@ $(document).ready(function(e) {
     drawSpider(dim, lev);
   });
 
-  $("#spiderContainer").on("click", function(e) {
-    var spiderContainer = $("#spiderContainer");
-    var width = spiderContainer.width();
-    var height = spiderContainer.height();
-    //drawCircle(e.clientX,e.clientY);
-    //drawCircle(width, height);
-  });
-
   function drawCircle(originX, originY) {
     var cx = originX;
     var cy = originY;
@@ -84,9 +78,7 @@ $(document).ready(function(e) {
       cx +
       '" cy="' +
       cy +
-      '" r="60" style="stroke:#000000; fill:#ec0907" />';
-    var line =
-      '<line  x1="500" y1="440" x2="500" y2="10" style="stroke: #006600; stroke-width:3;"/>';
+      '" r="60" style="stroke:#000000; fill:white" />';
     var existing = $("#svgContainer").html();
     $("#svgContainer").html(existing + circle);
     //$("#svgContainer").html(existing+line);
@@ -96,8 +88,8 @@ $(document).ready(function(e) {
     var spiderContainer = $("#spiderContainer");
     var width = spiderContainer.width();
     var height = spiderContainer.height();
-    var originX = width / 2;
-    var originY = height / 2;
+    var originX = width;
+    var originY = height;
     drawCircle(originX, originY);
     var thetaIncrement = (2 * Math.PI * (180 / Math.PI)) / dim.length;
     console.log(thetaIncrement);
@@ -131,7 +123,7 @@ $(document).ready(function(e) {
       x2 +
       '" y2="' +
       y2 +
-      '" style="stroke: #006600; stroke-width:3;"/>';
+      '" style="stroke: black; stroke-width:2;"/>';
     var existing = $("#svgContainer").html();
     $("#svgContainer").html(existing + line);
   }
