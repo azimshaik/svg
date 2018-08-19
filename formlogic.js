@@ -87,6 +87,7 @@ $(document).ready(function(e) {
     var originX = width;
     var originY = height;
     drawCircle(originX, originY, 60);
+    writeText(originX, originY);
     var thetaIncrement = (2 * Math.PI * (180 / Math.PI)) / dim.length;
     var theta = 0;
     for (var i = 0; i < dim.length; i++) {
@@ -95,7 +96,7 @@ $(document).ready(function(e) {
       var sinTheta = Math.sin(theta * (Math.PI / 180));
       var x1 = originX + radius * cosTheta;
       var y1 = originY + radius * sinTheta;
-      var limblength = 200;
+      var limblength = 300;
       var x2 = x1 + limblength * Math.cos(theta * (Math.PI / 180));
       var y2 = y1 + limblength * Math.sin(theta * (Math.PI / 180));
       drawLine(x1, y1, x2, y2);
@@ -113,10 +114,19 @@ $(document).ready(function(e) {
             (pointsBetween[j].y - spotRadius)) /
           2;
         drawCircle(x, y, spotRadius);
+        writeText(x + 15, y - 10);
       }
 
       theta += thetaIncrement;
     }
+  }
+
+  function writeText(x, y) {
+    // x = x + 15;
+    // y = y - 10;
+    var txt = '<text  x="' + x + '" y="' + y + '" style="">Test</text>';
+    var existing = $("#svgContainer").html();
+    $("#svgContainer").html(existing + txt);
   }
 
   var spotCount;
