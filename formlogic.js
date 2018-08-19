@@ -34,17 +34,16 @@ $(document).ready(function(e) {
         '"> <input id="del" type="button" value="X"><br></div>';
       $("#container").append(html);
       rows++;
-      //console.log("added");
       i++;
     }
   });
+
   $("#container").on("click", "#del", function(e) {
     $(this)
       .parent("div")
       .remove();
     rows--;
     $("#svgContainer").text("");
-    //location.reload();
     console.log("removed");
   });
 
@@ -53,7 +52,6 @@ $(document).ready(function(e) {
     $("#svgContainer").text("");
     var dim = [];
     var lev = [];
-    var obj = {};
     var input = $(this).serializeArray();
     var inputLength = input.length;
     for (var i = 0; i < inputLength; i++) {
@@ -64,15 +62,12 @@ $(document).ready(function(e) {
         lev.push(input[i].value);
       }
     }
-    console.log(dim);
-    console.log(lev);
     drawSpider(dim, lev);
   });
 
   function drawCircle(originX, originY, r) {
     var cx = originX;
     var cy = originY;
-    //console.log(cx);
     var circle =
       '<circle cx="' +
       cx +
@@ -83,9 +78,8 @@ $(document).ready(function(e) {
       '" style="stroke:#000000; fill:white" />';
     var existing = $("#svgContainer").html();
     $("#svgContainer").html(existing + circle);
-    //$("#svgContainer").html(existing+line);
-    //spiderContainer.append(line);
   }
+
   function drawSpider(dim, lev) {
     var spiderContainer = $("#spiderContainer");
     var width = spiderContainer.width();
@@ -94,7 +88,6 @@ $(document).ready(function(e) {
     var originY = height;
     drawCircle(originX, originY, 60);
     var thetaIncrement = (2 * Math.PI * (180 / Math.PI)) / dim.length;
-    //console.log(thetaIncrement);
     var theta = 0;
     for (var i = 0; i < dim.length; i++) {
       var radius = 60;
@@ -107,7 +100,6 @@ $(document).ready(function(e) {
       var y2 = y1 + limblength * Math.sin(theta * (Math.PI / 180));
       drawLine(x1, y1, x2, y2);
       var pointsBetween = getPointsBetween(x1, y1, x2, y2, 3);
-      //console.log(x1);
       for (var j = 0; j < 3; j++) {
         var spotRadius = 10;
         var x =
@@ -126,6 +118,7 @@ $(document).ready(function(e) {
       theta += thetaIncrement;
     }
   }
+
   var spotCount;
   function getPointsBetween(x1, y1, x2, y2, spotCount) {
     var pointsBetween = [];
