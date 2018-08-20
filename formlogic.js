@@ -23,22 +23,22 @@ $(document).ready(function(e) {
       var level_name2 = "level" + i + "_" + 2;
       var level_name3 = "level" + i + "_" + 3;
       var html =
-        '<div>Dimension <input type="text" value="sales" name="' +
+        '<div class="form-group row"><div class="col-xs-2"><input type="text" class="form-control" value="sales" name="' +
         dimension_name +
-        '"> Level 1 <input type="text" value="Northeast" name="' +
+        '"></div> <div class="col-xs-2"><input type="text" class="form-control" value="Northeast" name="' +
         level_name1 +
-        '"> Level 2 <input type="text" value="NorthWest" name="' +
+        '"></div> <div class="col-xs-2"><input type="text" class="form-control" value="NorthWest" name="' +
         level_name2 +
-        '"> Level 3 <input type="text" value="WestCoast" name="' +
+        '"></div> <div class="col-xs-2"> <input type="text" class="form-control" value="WestCoast" name="' +
         level_name3 +
-        '"> <input id="del" type="button" value="X"><br></div>';
-      $("#container").append(html);
+        '"></div> <div id="del" class="col-xs-2"> <input type="button" value="X"><br></div> </div></div>';
+      $("#inputContainer").append(html);
       rows++;
       i++;
     }
   });
 
-  $("#container").on("click", "#del", function(e) {
+  $("#inputContainer").on("click", "#del", function(e) {
     $(this)
       .parent("div")
       .remove();
@@ -84,8 +84,8 @@ $(document).ready(function(e) {
     var spiderContainer = $("#spiderContainer");
     var width = spiderContainer.width();
     var height = spiderContainer.height();
-    var originX = width;
-    var originY = height;
+    var originX = width / 2;
+    var originY = height / 2;
     drawCircle(originX, originY, 60);
     writeText(originX, originY);
     var thetaIncrement = (2 * Math.PI * (180 / Math.PI)) / dim.length;
