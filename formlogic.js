@@ -10,7 +10,7 @@ class Coordinate {
   }
 }
 
-$(document).ready(function(e) {
+$(document).ready(function (e) {
   var maxrows = 6;
   var rows = 1;
   let columns=4;
@@ -46,12 +46,13 @@ $(document).ready(function(e) {
         '"></div> <div class="col-xs-2"> <input type="text" class="form-control" value="WestCoast" name="' +
         preapareLevelName(rows,columns) + '"id="'+preapareLevelName(rows,columns++)+
         '"></div> <div id="del" class="col-xs-2"> <input type="button" value="X"><br></div> </div></div>';
+
       $("#inputContainer").append(html);
       rows++;
     }
   });
 
-  $("#inputContainer").on("click", "#del", function(e) {
+  $("#inputContainer").on("click", "#del", function (e) {
     $(this)
       .parent("div")
       .remove();
@@ -60,7 +61,7 @@ $(document).ready(function(e) {
     console.log("removed");
   });
 
-  $("form").submit(function(e) {
+  $("form").submit(function (e) {
     event.preventDefault();
     $("#svgContainer").text("");
     var dim = [];
@@ -106,7 +107,10 @@ $(document).ready(function(e) {
     $("#svgContainer").html(existing + circle);
   }
 
-  function drawSpider(dim, lev) {
+  function drawSpider(inputJSON) {
+    let obj = inputJSON;
+    console.log(obj);
+    let numOfRows = Object.keys(obj.row).length;
     var spiderContainer = $("#spiderContainer");
     var width = spiderContainer.width();
     var height = spiderContainer.height();
@@ -114,9 +118,9 @@ $(document).ready(function(e) {
     var originY = height / 2;
     drawCircle(originX, originY, 60);
     writeText(originX, originY);
-    var thetaIncrement = (2 * Math.PI * (180 / Math.PI)) / dim.length;
+    var thetaIncrement = (2 * Math.PI * (180 / Math.PI)) / numOfRows;
     var theta = 0;
-    for (var i = 0; i < dim.length; i++) {
+    for (var i = 0; i < numOfRows; i++) {
       var radius = 60;
       var cosTheta = Math.cos(theta * (Math.PI / 180));
       var sinTheta = Math.sin(theta * (Math.PI / 180));
@@ -156,6 +160,7 @@ $(document).ready(function(e) {
   }
 
   var spotCount;
+
   function getPointsBetween(x1, y1, x2, y2, spotCount) {
     var pointsBetween = [];
     x2 = Math.ceil(x2);
