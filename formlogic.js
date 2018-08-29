@@ -13,24 +13,42 @@ class Coordinate {
 $(document).ready(function (e) {
   var maxrows = 6;
   var rows = 1;
-  var i = 1;
-  var j = 1;
-  var maxlevels = 2;
-  $(".add_more").click(function (e) {
+  let columns=4;
+  let dataSet=[];
+
+  function prepareDimensionName(i){
+    return "dimension" + i + "_" + 1;
+  };
+
+  function preapareLevelName(row,column){
+    return "level" + row + "_" + column;
+  };
+
+  function prepareDataSet(i,j){
+      let dataInserted={};
+      dataInserted["dimention"]=$("#"+prepareDimensionName(i)).val();
+      dataInserted["level_1"]=$("#"+preapareLevelName(i,j++)).val();
+      dataInserted["level_2"]=$("#"+preapareLevelName(i,j++)).val();
+      dataInserted["level_3"]=$("#"+preapareLevelName(i,j++)).val();
+      dataSet.push(dataInserted);
+  }
+
+  $(".add_more").click(function(e) {
     if (rows <= maxrows) {
-      var dimension_name = "dimension" + i;
-      var level_name1 = "level" + i + "_" + 1;
-      var level_name2 = "level" + i + "_" + 2;
-      var level_name3 = "level" + i + "_" + 3;
+      columns = 1;
       var html =
-        '<div class="form-group row"><div class="col-xs-2"><input type="text" class="form-control" value="sales" name="row[dimension]"></div>' +
-        '<div class="col-xs-2"><input type="text" class="form-control" value="Northeast" name="row[level1]" id="' + level_name1 + '"></div>' +
-        '<div class="col-xs-2"><input type="text" class="form-control" value="NorthWest" name="row[level2]" id="' + level_name2 + '"></div>' +
-        '<div class="col-xs-2"> <input type="text" class="form-control" value="WestCoast" name="row[level3]" id="' + level_name3 + '"></div>' +
-        '<div id="del" class="col-xs-2"> <input type="button" value="X"><br></div> </div></div>';
+        '<div class="form-group row"><div class="col-xs-2"><input type="text" class="form-control" value="sales" name="' +
+        prepareDimensionName(rows) + '"id="'+prepareDimensionName(rows)+
+        '"></div> <div class="col-xs-2"><input type="text" class="form-control" value="Northeast" name="' +
+        preapareLevelName(rows,columns) + '"id="'+preapareLevelName(rows,columns++)+
+        '"></div> <div class="col-xs-2"><input type="text" class="form-control" value="NorthWest" name="' +
+        preapareLevelName(rows,columns) + '"id="'+preapareLevelName(rows,columns++)+
+        '"></div> <div class="col-xs-2"> <input type="text" class="form-control" value="WestCoast" name="' +
+        preapareLevelName(rows,columns) + '"id="'+preapareLevelName(rows,columns++)+
+        '"></div> <div id="del" class="col-xs-2"> <input type="button" value="X"><br></div> </div></div>';
+
       $("#inputContainer").append(html);
       rows++;
-      i++;
     }
   });
 
@@ -49,18 +67,29 @@ $(document).ready(function (e) {
     var dim = [];
     var lev = [];
     var input = $(this).serializeArray();
-    var inputJSON = $(this).serializeJSON();
-    console.log(inputJSON);
-    // var inputLength = input.length;
-    // for (var i = 0; i < inputLength; i++) {
-    //   var val = input[i].name.startsWith("dim");
-    //   if (val) {
-    //     dim.push(input[i].value);
-    //   } else {
-    //     lev.push(input[i].value);
-    //   }
-    // }
-    drawSpider(inputJSON);
+    dataSet=[];
+    for(let i=0;i<rows;i++){
+      prepareDataSet(i,1);
+    }
+    console.log(dataSet);
+    var inputLength = input.length;
+    for (var i = 0; i < rows; i++) {
+      //var val = input[i].name.startsWith("dim");
+      dim.push(dataSet[i].dimension);
+      for(let j=0;j<columns;j++){
+        let columnName=preapareLevelName(i,j);
+        lev.push(dataSet[i][columnName]);
+      }
+      // if (val) {
+      //   dim.push(dataSet[i].dimension);
+      // } else {
+      //   for(let j=0;j<columns;j++){
+      //     let columnName=preapareLevelName(i,j);
+      //     lev.push(dataSet[i][columnName]);
+      //   }
+      // }
+    }
+    drawSpider(dim, lev);
   });
 
   function drawCircle(originX, originY, r) {
