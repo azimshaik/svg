@@ -10,35 +10,31 @@ class Coordinate {
   }
 }
 
-$(document).ready(function(e) {
+$(document).ready(function (e) {
   var maxrows = 6;
   var rows = 1;
   var i = 1;
   var j = 1;
   var maxlevels = 2;
-  $(".add_more").click(function(e) {
+  $(".add_more").click(function (e) {
     if (rows <= maxrows) {
       var dimension_name = "dimension" + i;
       var level_name1 = "level" + i + "_" + 1;
       var level_name2 = "level" + i + "_" + 2;
       var level_name3 = "level" + i + "_" + 3;
       var html =
-        '<div class="form-group row"><div class="col-xs-2"><input type="text" class="form-control" value="sales" name="' +
-        dimension_name +
-        '"></div> <div class="col-xs-2"><input type="text" class="form-control" value="Northeast" name="' +
-        level_name1 +
-        '"></div> <div class="col-xs-2"><input type="text" class="form-control" value="NorthWest" name="' +
-        level_name2 +
-        '"></div> <div class="col-xs-2"> <input type="text" class="form-control" value="WestCoast" name="' +
-        level_name3 +
-        '"></div> <div id="del" class="col-xs-2"> <input type="button" value="X"><br></div> </div></div>';
+        '<div class="form-group row"><div class="col-xs-2"><input type="text" class="form-control" value="sales" name="row[dimension]"></div>' +
+        '<div class="col-xs-2"><input type="text" class="form-control" value="Northeast" name="row[level1]" id="' + level_name1 + '"></div>' +
+        '<div class="col-xs-2"><input type="text" class="form-control" value="NorthWest" name="row[level2]" id="' + level_name2 + '"></div>' +
+        '<div class="col-xs-2"> <input type="text" class="form-control" value="WestCoast" name="row[level3]" id="' + level_name3 + '"></div>' +
+        '<div id="del" class="col-xs-2"> <input type="button" value="X"><br></div> </div></div>';
       $("#inputContainer").append(html);
       rows++;
       i++;
     }
   });
 
-  $("#inputContainer").on("click", "#del", function(e) {
+  $("#inputContainer").on("click", "#del", function (e) {
     $(this)
       .parent("div")
       .remove();
@@ -47,22 +43,24 @@ $(document).ready(function(e) {
     console.log("removed");
   });
 
-  $("form").submit(function(e) {
+  $("form").submit(function (e) {
     event.preventDefault();
     $("#svgContainer").text("");
     var dim = [];
     var lev = [];
     var input = $(this).serializeArray();
-    var inputLength = input.length;
-    for (var i = 0; i < inputLength; i++) {
-      var val = input[i].name.startsWith("dim");
-      if (val) {
-        dim.push(input[i].value);
-      } else {
-        lev.push(input[i].value);
-      }
-    }
-    drawSpider(dim, lev);
+    var inputJSON = $(this).serializeJSON();
+    console.log(inputJSON);
+    // var inputLength = input.length;
+    // for (var i = 0; i < inputLength; i++) {
+    //   var val = input[i].name.startsWith("dim");
+    //   if (val) {
+    //     dim.push(input[i].value);
+    //   } else {
+    //     lev.push(input[i].value);
+    //   }
+    // }
+    drawSpider(inputJSON);
   });
 
   function drawCircle(originX, originY, r) {
@@ -80,7 +78,10 @@ $(document).ready(function(e) {
     $("#svgContainer").html(existing + circle);
   }
 
-  function drawSpider(dim, lev) {
+  function drawSpider(inputJSON) {
+    let obj = inputJSON;
+    console.log(obj);
+    let numOfRows = Object.keys(obj.row).length;
     var spiderContainer = $("#spiderContainer");
     var width = spiderContainer.width();
     var height = spiderContainer.height();
@@ -88,9 +89,9 @@ $(document).ready(function(e) {
     var originY = height / 2;
     drawCircle(originX, originY, 60);
     writeText(originX, originY);
-    var thetaIncrement = (2 * Math.PI * (180 / Math.PI)) / dim.length;
+    var thetaIncrement = (2 * Math.PI * (180 / Math.PI)) / numOfRows;
     var theta = 0;
-    for (var i = 0; i < dim.length; i++) {
+    for (var i = 0; i < numOfRows; i++) {
       var radius = 60;
       var cosTheta = Math.cos(theta * (Math.PI / 180));
       var sinTheta = Math.sin(theta * (Math.PI / 180));
@@ -130,6 +131,7 @@ $(document).ready(function(e) {
   }
 
   var spotCount;
+
   function getPointsBetween(x1, y1, x2, y2, spotCount) {
     var pointsBetween = [];
     x2 = Math.ceil(x2);
