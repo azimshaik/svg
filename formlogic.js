@@ -10,27 +10,27 @@ class Coordinate {
   }
 }
 
-$(document).ready(function (e) {
+$(document).ready(function(e) {
   var maxrows = 6;
   var rows = 1;
-  let columns=4;
-  let dataSet=[];
+  let columns = 4;
+  let dataSet = [];
 
-  function prepareDimensionName(i){
+  function prepareDimensionName(i) {
     return "dimension" + i + "_" + 1;
-  };
+  }
 
-  function preapareLevelName(row,column){
+  function preapareLevelName(row, column) {
     return "level" + row + "_" + column;
-  };
+  }
 
-  function prepareDataSet(i,j){
-      let dataInserted={};
-      dataInserted["dimention"]=$("#"+prepareDimensionName(i)).val();
-      dataInserted["level_1"]=$("#"+preapareLevelName(i,j++)).val();
-      dataInserted["level_2"]=$("#"+preapareLevelName(i,j++)).val();
-      dataInserted["level_3"]=$("#"+preapareLevelName(i,j++)).val();
-      dataSet.push(dataInserted);
+  function prepareDataSet(i, j) {
+    let dataInserted = {};
+    dataInserted["dimention"] = $("#" + prepareDimensionName(i)).val();
+    dataInserted["level_1"] = $("#" + preapareLevelName(i, j++)).val();
+    dataInserted["level_2"] = $("#" + preapareLevelName(i, j++)).val();
+    dataInserted["level_3"] = $("#" + preapareLevelName(i, j++)).val();
+    dataSet.push(dataInserted);
   }
 
   $(".add_more").click(function(e) {
@@ -38,13 +38,21 @@ $(document).ready(function (e) {
       columns = 1;
       var html =
         '<div class="form-group row"><div class="col-xs-2"><input type="text" class="form-control" value="sales" name="' +
-        prepareDimensionName(rows) + '"id="'+prepareDimensionName(rows)+
+        prepareDimensionName(rows) +
+        '"id="' +
+        prepareDimensionName(rows) +
         '"></div> <div class="col-xs-2"><input type="text" class="form-control" value="Northeast" name="' +
-        preapareLevelName(rows,columns) + '"id="'+preapareLevelName(rows,columns++)+
+        preapareLevelName(rows, columns) +
+        '"id="' +
+        preapareLevelName(rows, columns++) +
         '"></div> <div class="col-xs-2"><input type="text" class="form-control" value="NorthWest" name="' +
-        preapareLevelName(rows,columns) + '"id="'+preapareLevelName(rows,columns++)+
+        preapareLevelName(rows, columns) +
+        '"id="' +
+        preapareLevelName(rows, columns++) +
         '"></div> <div class="col-xs-2"> <input type="text" class="form-control" value="WestCoast" name="' +
-        preapareLevelName(rows,columns) + '"id="'+preapareLevelName(rows,columns++)+
+        preapareLevelName(rows, columns) +
+        '"id="' +
+        preapareLevelName(rows, columns++) +
         '"></div> <div id="del" class="col-xs-2"> <input type="button" value="X"><br></div> </div></div>';
 
       $("#inputContainer").append(html);
@@ -52,7 +60,7 @@ $(document).ready(function (e) {
     }
   });
 
-  $("#inputContainer").on("click", "#del", function (e) {
+  $("#inputContainer").on("click", "#del", function(e) {
     $(this)
       .parent("div")
       .remove();
@@ -61,23 +69,23 @@ $(document).ready(function (e) {
     console.log("removed");
   });
 
-  $("form").submit(function (e) {
+  $("form").submit(function(e) {
     event.preventDefault();
     $("#svgContainer").text("");
     var dim = [];
     var lev = [];
     var input = $(this).serializeArray();
-    dataSet=[];
-    for(let i=0;i<rows;i++){
-      prepareDataSet(i,1);
+    dataSet = [];
+    for (let i = 0; i < rows; i++) {
+      prepareDataSet(i, 1);
     }
-    console.log(dataSet);
+    //console.log(dataSet);
     var inputLength = input.length;
     for (var i = 0; i < rows; i++) {
       //var val = input[i].name.startsWith("dim");
       dim.push(dataSet[i].dimension);
-      for(let j=0;j<columns;j++){
-        let columnName=preapareLevelName(i,j);
+      for (let j = 0; j < columns; j++) {
+        let columnName = preapareLevelName(i, j);
         lev.push(dataSet[i][columnName]);
       }
       // if (val) {
@@ -89,7 +97,7 @@ $(document).ready(function (e) {
       //   }
       // }
     }
-    drawSpider(dim, lev);
+    drawSpider(dataSet);
   });
 
   function drawCircle(originX, originY, r) {
@@ -107,10 +115,10 @@ $(document).ready(function (e) {
     $("#svgContainer").html(existing + circle);
   }
 
-  function drawSpider(inputJSON) {
-    let obj = inputJSON;
-    console.log(obj);
-    let numOfRows = Object.keys(obj.row).length;
+  function drawSpider(dataSet) {
+    //let obj = inputJSON;
+    //console.log(dataSet);
+    let numOfRows = dataSet.length;
     var spiderContainer = $("#spiderContainer");
     var width = spiderContainer.width();
     var height = spiderContainer.height();
@@ -121,6 +129,10 @@ $(document).ready(function (e) {
     var thetaIncrement = (2 * Math.PI * (180 / Math.PI)) / numOfRows;
     var theta = 0;
     for (var i = 0; i < numOfRows; i++) {
+      var numlevels = Object.keys(dataSet[i]).length;
+      var l = 0;
+      console.log(l);
+      console.log(dataSet[i].l);
       var radius = 60;
       var cosTheta = Math.cos(theta * (Math.PI / 180));
       var sinTheta = Math.sin(theta * (Math.PI / 180));
@@ -146,7 +158,7 @@ $(document).ready(function (e) {
         drawCircle(x, y, spotRadius);
         writeText(x + 15, y - 10);
       }
-
+      l++;
       theta += thetaIncrement;
     }
   }
