@@ -10,7 +10,7 @@ class Coordinate {
   }
 }
 
-$(document).ready(function(e) {
+$(document).ready(function (e) {
   var maxrows = 6;
   var rows = 1;
   let columns = 4;
@@ -33,7 +33,7 @@ $(document).ready(function(e) {
     dataSet.push(dataInserted);
   }
 
-  $(".add_more").click(function(e) {
+  $(".add_more").click(function (e) {
     if (rows <= maxrows) {
       columns = 1;
       var html =
@@ -60,7 +60,7 @@ $(document).ready(function(e) {
     }
   });
 
-  $("#inputContainer").on("click", "#del", function(e) {
+  $("#inputContainer").on("click", "#del", function (e) {
     $(this)
       .parent("div")
       .remove();
@@ -69,7 +69,7 @@ $(document).ready(function(e) {
     console.log("removed");
   });
 
-  $("form").submit(function(e) {
+  $("form").submit(function (e) {
     event.preventDefault();
     $("#svgContainer").text("");
     var dim = [];
@@ -131,8 +131,9 @@ $(document).ready(function(e) {
     for (var i = 0; i < numOfRows; i++) {
       var numlevels = Object.keys(dataSet[i]).length;
       var l = 0;
-      console.log(l);
-      console.log(dataSet[i]);
+      var p = 0;
+      //console.log(l);
+      //console.log(dataSet[i]);
       var Objkeys = Object.keys(dataSet[i]);
       var Objvalues = Object.values(dataSet[i]);
       var radius = 60;
@@ -144,8 +145,8 @@ $(document).ready(function(e) {
       var x2 = x1 + limblength * Math.cos(theta * (Math.PI / 180));
       var y2 = y1 + limblength * Math.sin(theta * (Math.PI / 180));
       drawLine(x1, y1, x2, y2);
-      var pointsBetween = getPointsBetween(x1, y1, x2, y2, 3);
-      for (var j = 0; j < 3; j++) {
+      var pointsBetween = getPointsBetween(x1, y1, x2, y2, numlevels);
+      for (var j = 0; j < numlevels; j++) {
         var spotRadius = 10;
         var x =
           (pointsBetween[j].x -
@@ -158,18 +159,18 @@ $(document).ready(function(e) {
             (pointsBetween[j].y - spotRadius)) /
           2;
         drawCircle(x, y, spotRadius);
-
-        writeText(x + 15, y - 10);
+        writeText(x + 15, y - 10, Objvalues[j]);
+        console.log(Objvalues[j]);
       }
       l++;
       theta += thetaIncrement;
     }
   }
 
-  function writeText(x, y) {
+  function writeText(x, y, text) {
     // x = x + 15;
     // y = y - 10;
-    var txt = '<text  x="' + x + '" y="' + y + '" style="">Test</text>';
+    var txt = '<text  x="' + x + '" y="' + y + '" style="">' + text + '</text>';
     var existing = $("#svgContainer").html();
     $("#svgContainer").html(existing + txt);
   }
