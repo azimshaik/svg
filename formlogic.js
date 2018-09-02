@@ -132,7 +132,9 @@ $(document).ready(function(e) {
       var numlevels = Object.keys(dataSet[i]).length;
       var l = 0;
       console.log(l);
-      console.log(dataSet[i].l);
+      console.log(dataSet[i]);
+      var Objkeys = Object.keys(dataSet[i]);
+      var Objvalues = Object.values(dataSet[i]);
       var radius = 60;
       var cosTheta = Math.cos(theta * (Math.PI / 180));
       var sinTheta = Math.sin(theta * (Math.PI / 180));
@@ -156,6 +158,7 @@ $(document).ready(function(e) {
             (pointsBetween[j].y - spotRadius)) /
           2;
         drawCircle(x, y, spotRadius);
+
         writeText(x + 15, y - 10);
       }
       l++;
