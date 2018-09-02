@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
   var canvas = new fabric.Canvas("canvas");
   var canvasWidth = canvas.width;
   var canvasHeight = canvas.height;
@@ -10,6 +10,7 @@ $(document).ready(function() {
   for (var i = 0; i < dimensions.length; i++) {
     var x = 50 * Math.cos(theta);
   }
+
   function drawCircle(left, top, sw, r) {
     var circle = new fabric.Circle({
       center: left,
@@ -32,7 +33,7 @@ $(document).ready(function() {
   }
   //canvas.add(drawLine());
 
-  $("#selectsecond").click(function() {
+  $("#selectsecond").click(function () {
     canvas.setActiveObject(canvas.item(1));
   });
   canvas.renderAll();
