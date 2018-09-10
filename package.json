@@ -1,0 +1,27 @@
+{
+  "name": "svg",
+  "version": "1.0.0",
+  "description": "officegen integration",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/azimshaik/svg.git"
+  },
+  "keywords": [
+    "officegen",
+    "word"
+  ],
+  "author": "Azim Shaik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/azimshaik/svg/issues"
+  },
+  "homepage": "https://github.com/azimshaik/svg#readme",
+  "dependencies": {
+    "officegen": "^0.4.5",
+    "path": "^0.12.7"
+  }
+}
