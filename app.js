@@ -23,10 +23,23 @@ docx.on('error', function (err) {
 
 var pObj = docx.createP();
 
-pObj.addText('Simple');
-pObj.addText(' with color', {
-    color: '000088'
+// pObj.addText('The BIDiscovery Workshop!');
+pObj.addText('The BIDiscovery Workshop!', {
+    color: '000088',
+    font_size: '28',
+    align: 'center'
 });
+pObj.addLineBreak();
+
+pObj.addText('Findings and Recommendations', {
+    color: '000088',
+    font_size: '20',
+    align: 'center'
+});
+pObj.addLineBreak();
+
+
+
 pObj.addText(' and back color.', {
     color: '00ffff',
     back: '000088'
